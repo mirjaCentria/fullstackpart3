@@ -20,30 +20,27 @@ morgan.token('body', (req, res) => {
 })
 app.use(morgan(':method :url :status :response[content-length] - :response-time ms :body'))
 */
-let persons = [
-    {
-    "name": "Arto Hellas",
-    "number": "040-123456",
-    "id": 1
-    },
-    {
-    "name": "Ada Lovelace",
-    "number": "39-44-5323523",
-    "id": 2
-    },
-    {
-    "name": "Dan Abramov",
-    "number": "12-43-234345",
-    "id": 3
-    },
-    {
-    "name": "Mary Poppendieck",
-    "number": "39-23-6423122",
-    "id": 4
-    }
-]
-app.get('/api/persons', cors(), (request, response) => {
+
+
+const mongoose = require('mongoose')
+
+// DO NOT SAVE YOUR PASSWORD TO GITHUB!!
+const url =
+  `mongodb+srv://fullstack:${password}@fullstack.vr8vi.mongodb.net/persons?retryWrites=true`
+
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
+
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: String,
+})
+
+const Person = mongoose.model('Person', personSchema)
+
+app.get('/api/persons', (request, response) => {
+  Person.find({}).then(persons => {
     response.json(persons)
+  })
 })
 
 app.get('/info', cors(), (request, response) => {
