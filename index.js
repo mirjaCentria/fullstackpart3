@@ -68,7 +68,8 @@ app.delete('/api/persons/:id', cors(), (request, response) => {
 
 app.post('/api/persons', cors(), (request, response) => {
   const body = request.body
-  
+  console.log('apppost', body.name)
+  /*
   if (body.name == null || body.number == null ) {
     return response.status(400).json({
         error: 'number is missing'
@@ -80,32 +81,35 @@ app.post('/api/persons', cors(), (request, response) => {
     })
   }
   if (body.name === undefined) {
-    return response.status(400).json({ error: 'name is missing!' })
+    return response.status(400).json({ 
+      error: 'name is missing!' 
+    })
   }
 
   if (body.number === undefined) {
-    return response.status(400).json({ error: 'number is missing!' })
-  }
+    return response.status(400).json({ 
+      error: 'number is missing!' 
+    })
+  }*/
 
-
-const person = {
+  console.log('apppost2')
+const person = new Person({
   name: body.name,
   number: body.number
-}
-
+})
+console.log('apppost3')
 person.save().then(saved => {
   response.json(saved)
 })
 
+console.log('apppost4')
   persons = persons.concat(person)
-  console.log(person)
-  response.json(person) 
+  console.log('app.post ')
+ // response.json(person) 
 })
 
-
-
-const PORT = process.env.PORT 
-//const PORT = 3001
+//const PORT = process.env.PORT 
+const PORT = 3001
 console.log({PORT})
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
