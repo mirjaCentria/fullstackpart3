@@ -3,13 +3,16 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const mongoose = require('mongoose')
-
+const uniqueValidator = require('mongoose-unique-validator');
 const Person = require('./models/person')
+const { modelName } = require('./models/person')
 
 const app = express()
 app.use(express.static('build'))
 app.use(express.json())
 app.use(cors())
+
+
 
 //app.use(morgan('tiny'))
 
@@ -64,9 +67,9 @@ app.delete('/api/persons/:id', cors(), (request, response) => {
 })
 
 
-app.post('/api/persons', cors(), (request, response) => {
+app.post('/api/persons', cors(), (request, response, next) => {
   const body = request.body
- // console.log('apppost', body.name)
+  console.log('apppost', body.id)
   
   if (body.name == null || body.number == null ) {
     return response.status(400).json({
@@ -90,16 +93,18 @@ app.post('/api/persons', cors(), (request, response) => {
     })
   }
 
- // console.log('apppost2')
+ console.log('apppost2')
   const person = new Person({
     name: body.name,
-    number: body.number
+    number: body.number,
+  //  id: body.id
   })
- // console.log('apppost3')
+  console.log('apppost3')
   person.save().then(saved => {
-    response.json(saved)
+    response.json(saved.toJSON())
   })
-  persons = persons.concat(person)
+  .catch(error => next(error))
+ // persons = persons.concat(person)
 })
 
 const unknownEndpoint = (request, response) => {
