@@ -10,8 +10,8 @@ const password = process.argv[2]
 const name = process.argv[3]
 const number = process.argv[4]
 
-//const url = MONGODB_URI
-const url = `mongodb+srv://fullstack:${password}@fullstack.vr8vi.mongodb.net/persons?retryWrites=true`
+const url = MONGODB_URI
+
 
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
 

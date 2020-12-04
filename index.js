@@ -3,7 +3,7 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const mongoose = require('mongoose')
-const uniqueValidator = require('mongoose-unique-validator');
+const uniqueValidator = require('mongoose-unique-validator')
 const Person = require('./models/person')
 const { modelName } = require('./models/person')
 
@@ -18,11 +18,11 @@ app.use(cors())
 
 morgan.token('body', (request, response) => {
     
-    if (request.method === 'POST') {
-        return JSON.stringify(request.body)
-    } else {
-        return null
-    }
+  if (request.method === 'POST') {
+    return JSON.stringify(request.body)
+  } else {
+    return null
+  }
 })
 //app.use(morgan(':method :url :status :response[content-length] - :response-time ms :body'))
 
@@ -45,40 +45,40 @@ app.get('/api/persons/:id', cors(), (request, response, next) => {
   const id = request.params.id
   console.log(id)
   Person.findById(request.params.id)
-  .then(person => {
-   console.log(person)
-    if (person) {
+    .then(person => {
+      console.log(person)
+      if (person) {
         response.json(person)
-    } else {
+      } else {
         response.status(404).end()
-    }
-  })
-  .catch(error => next(error))
+      }
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', cors(), (request, response) => {
   Person.findByIdAndRemove(request.params.id)
-  .then(result => {
-    const id = request.params.id
-    persons = persons.filter(person => person.id !== id)
-    response.status(204).end()
-  })
-  .catch(error => next(error))
+    .then(result => {
+      const id = request.params.id
+      persons = persons.filter(person => person.id !== id)
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 
 app.post('/api/persons', cors(), (request, response, next) => {
   const body = request.body
-  console.log('apppost', body.id)
+  //console.log('apppost', body.id)
   
   if (body.name == null || body.number == null ) {
     return response.status(400).json({
-        error: 'number is missing'
+      error: 'number is missing'
     }) 
   }
   if (!persons.every(p => p.name !== body.name)) {
     return response.status(400).json({
-        error: 'name must be unique'
+      error: 'name must be unique'
     })
   }
   if (body.name === undefined) {
@@ -93,18 +93,16 @@ app.post('/api/persons', cors(), (request, response, next) => {
     })
   }
 
- console.log('apppost2')
   const person = new Person({
     name: body.name,
     number: body.number,
   //  id: body.id
   })
-  console.log('apppost3')
+
   person.save().then(saved => {
     response.json(saved.toJSON())
   })
-  .catch(error => next(error))
- // persons = persons.concat(person)
+    .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
@@ -125,10 +123,7 @@ const errorHandler = (error, request, response, next) => {
 
 app.use(errorHandler)
 
-
-//const PORT = process.env.PORT 
-const PORT = 3001
-console.log({PORT})
+const PORT = process.env.PORT 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
